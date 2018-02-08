@@ -19,13 +19,13 @@ namespace DivideByZero.Gyazo
         }
         public override bool keepWaiting { get { return Result == null && IsError == false; } }
 
-        public GyazoUploader UploadScreenShotAsync(Action<GyazoResponse> callback = null)
+        public GyazoUploader UploadScreenShotAsync(Action<GyazoResponse,string> callback = null)
         {
             GyazoUploadManager.Instance.StartCoroutine(UploadSSIterator(callback));
             return this;
         }
 
-        private IEnumerator UploadSSIterator(Action<GyazoResponse> callback)
+        private IEnumerator UploadSSIterator(Action<GyazoResponse,string> callback)
         {
             yield return new WaitForEndOfFrame();
             var tex = ScreenCapture.CaptureScreenshotAsTexture();
@@ -33,13 +33,13 @@ namespace DivideByZero.Gyazo
             UnityEngine.Object.Destroy(tex);
         }
 
-        public GyazoUploader UploadJpegByteDataAsync(byte[] jpegBytes, Action<GyazoResponse> callback = null)
+        public GyazoUploader UploadJpegByteDataAsync(byte[] jpegBytes, Action<GyazoResponse,string> callback = null)
         {
             GyazoUploadManager.Instance.StartCoroutine(UploadImageBytesIterator(jpegBytes, callback));
             return this;
         }
 
-        private IEnumerator UploadImageBytesIterator(byte[] byteData, Action<GyazoResponse> callback)
+        private IEnumerator UploadImageBytesIterator(byte[] byteData, Action<GyazoResponse,string> callback)
         {
             var gyazoUploadUrl = "https://upload.gyazo.com/api/upload";
 
@@ -65,8 +65,8 @@ namespace DivideByZero.Gyazo
                 {
                     var responseParse = JsonUtility.FromJson<GyazoResponse>(request.downloadHandler.text);
                     Result = responseParse;
-                    if (callback != null) callback.Invoke(Result);
                 }
+                if (callback != null) callback.Invoke(Result,ErrorMessage);
             }
         }
     }
