@@ -114,9 +114,9 @@ public class GyazoUploadTest : MonoBehaviour
 }
 ```
 
-エラー有無は `IsError`プロパティ
-エラー内容は `ErrorMessage`プロパティ
-成功時の結果は `Result`プロパティ
+エラー有無は `IsError`プロパティ  
+エラー内容は `ErrorMessage`プロパティ  
+成功時の結果は `Result`プロパティ  
 
 に格納されます。
 
